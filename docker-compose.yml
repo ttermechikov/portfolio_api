@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  main:
+    build:
+      context: .
+      target: development
+      args:
+        - NODE_ENV=development
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 3000:3000
+    env_file:
+      - .env
+    command: npm run start:dev
+    networks:
+      - webnet
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:15-alpine
+    networks:
+      - webnet
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_DB: ${DB_DATABASE_NAME}
+      PG_DATA: /var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+networks:
+  webnet:
+
+volumes:
+  pgdata:
