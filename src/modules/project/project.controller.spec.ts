@@ -4,6 +4,7 @@ import { ProjectService } from './project.service';
 import { createMock } from '@golevelup/ts-jest';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
+import { ConfigModule } from '@nestjs/config';
 
 describe('ProjectController', () => {
   let projectController: ProjectController;
@@ -11,6 +12,7 @@ describe('ProjectController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [ConfigModule],
       controllers: [ProjectController],
       providers: [
         { provide: ProjectService, useValue: createMock<ProjectService>() },

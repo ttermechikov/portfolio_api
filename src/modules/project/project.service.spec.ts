@@ -4,6 +4,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { ProjectEntity } from './project.entity';
 import { Repository } from 'typeorm';
 import { HttpException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 describe('ProjectService', () => {
   let projectService: ProjectService;
@@ -22,6 +23,7 @@ describe('ProjectService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ProjectService,
+        ConfigService,
         {
           provide: getRepositoryToken(ProjectEntity),
           useValue: {

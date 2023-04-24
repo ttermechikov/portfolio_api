@@ -7,6 +7,7 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  UseGuards,
   UsePipes,
 } from '@nestjs/common';
 import { ProjectService } from './project.service';
@@ -15,6 +16,8 @@ import { ProjectResponseInterface } from './types/project-response.interface';
 import { BackendValidationPipe } from '../../shared/pipes/backend-validation.pipe';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
+import { AuthGuard } from '../user/guards/auth.guard';
+import { AdminGuard } from '../user/guards/admin.guard';
 
 @Controller('projects')
 export class ProjectController {
@@ -34,6 +37,7 @@ export class ProjectController {
   }
 
   @Post()
+  @UseGuards(AuthGuard, AdminGuard)
   @UsePipes(new BackendValidationPipe())
   async create(
     @Body('project') createProjectDto: CreateProjectDto,
@@ -43,6 +47,7 @@ export class ProjectController {
   }
 
   @Put(':id')
+  @UseGuards(AuthGuard, AdminGuard)
   @UsePipes(new BackendValidationPipe())
   async update(
     @Param('id', ParseIntPipe) projectId: number,
@@ -56,6 +61,7 @@ export class ProjectController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard, AdminGuard)
   @UsePipes(new BackendValidationPipe())
   async delete(@Param('id', ParseIntPipe) projectId: number) {
     return await this.projectService.delete(projectId);
