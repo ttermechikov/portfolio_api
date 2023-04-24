@@ -9,7 +9,9 @@ const {
   POSTGRES_USER: username,
   POSTGRES_PASSWORD: password,
   POSTGRES_DB: database,
+  NODE_ENV,
 } = process.env;
+const isTestEnv = NODE_ENV === 'test';
 
 export const ormconfig: DataSourceOptions = {
   type: 'postgres',
@@ -24,12 +26,15 @@ export const ormconfig: DataSourceOptions = {
 };
 
 const AppDataSource = new DataSource(ormconfig);
-AppDataSource.initialize()
-  .then(() => {
-    console.log('Data Source has been initialized!');
-  })
-  .catch((err) => {
-    console.error('Error during Data Source initialization', err);
-  });
+
+if (!isTestEnv) {
+  AppDataSource.initialize()
+    .then(() => {
+      console.log('Data Source has been initialized!');
+    })
+    .catch((err) => {
+      console.error('Error during Data Source initialization', err);
+    });
+}
 
 export default AppDataSource;

@@ -26,7 +26,7 @@ export class BackendValidationPipe implements PipeTransform {
       return value;
     }
 
-    const errors = await validate(object);
+    const errors = await validate(object, { whitelist: true });
 
     if (errors.length === 0) {
       return value;
