@@ -8,6 +8,7 @@ import { ormconfig } from '../../ormconfig';
 import { ProjectModule } from '../project/project.module';
 import { AuthMiddleware } from '../user/middlewares/auth.middleware';
 import config from '../../config/configuration';
+import { TechnologyModule } from '../technology/technology.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import config from '../../config/configuration';
     TypeOrmModule.forRoot(ormconfig),
     UserModule,
     ProjectModule,
+    TechnologyModule,
   ],
   controllers: [AppController],
   providers: [AppService],

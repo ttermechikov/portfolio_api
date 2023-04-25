@@ -1,4 +1,5 @@
 import { IsNotEmpty } from 'class-validator';
+import { TechnologyType } from 'src/modules/technology/types/technology.type';
 
 export class CreateProjectDto {
   @IsNotEmpty()
@@ -12,4 +13,6 @@ export class CreateProjectDto {
   readonly url: string;
 
   readonly weight: number;
+
+  technologyNamesList: TechnologyType['name'][];
 }

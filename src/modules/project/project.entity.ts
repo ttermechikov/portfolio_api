@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { TechnologyEntity } from '../technology/technology.entity';
 
 @Entity('projects')
 export class ProjectEntity {
@@ -19,4 +26,8 @@ export class ProjectEntity {
 
   @Column({ default: 1 })
   weight: number;
+
+  @ManyToMany(() => TechnologyEntity, (technology) => technology.projects)
+  @JoinTable()
+  technologies: TechnologyEntity[];
 }

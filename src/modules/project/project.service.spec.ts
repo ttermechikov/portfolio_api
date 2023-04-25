@@ -4,11 +4,15 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { ProjectEntity } from './project.entity';
 import { Repository } from 'typeorm';
 import { HttpException } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { TechnologyEntity } from '../technology/technology.entity';
+import { TechnologyService } from '../technology/technology.service';
 
 describe('ProjectService', () => {
   let projectService: ProjectService;
   let projectRepository: Repository<ProjectEntity>;
+
+  const technologyEntity = new TechnologyEntity();
+  technologyEntity.name = 'TypeScript';
 
   const testProjectEntity: ProjectEntity = {
     id: 42,
@@ -17,15 +21,24 @@ describe('ProjectService', () => {
     repository_url: '',
     url: '',
     weight: 7,
+    technologies: [technologyEntity],
   };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ProjectService,
-        ConfigService,
+        TechnologyService,
         {
           provide: getRepositoryToken(ProjectEntity),
+          useValue: {
+            save: jest.fn(),
+            findOne: jest.fn(),
+            delete: jest.fn(),
+          },
+        },
+        {
+          provide: getRepositoryToken(TechnologyEntity),
           useValue: {
             save: jest.fn(),
             findOne: jest.fn(),
@@ -79,7 +92,10 @@ describe('ProjectService', () => {
 
   describe('create', () => {
     it('should save a project', async () => {
-      const testCreateProjectDto = { ...testProjectEntity };
+      const testCreateProjectDto = {
+        ...testProjectEntity,
+        technologyNamesList: [],
+      };
       delete testCreateProjectDto.id;
 
       await projectService.create(testCreateProjectDto);

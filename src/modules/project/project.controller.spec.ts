@@ -49,6 +49,7 @@ describe('ProjectController', () => {
       url: '',
       repository_url: '',
       weight: 1,
+      technologyNamesList: [],
     };
 
     await projectController.create(createProjectDto);
